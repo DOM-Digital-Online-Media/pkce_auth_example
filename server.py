@@ -28,6 +28,7 @@ AUTH0_CLIENT_SECRET = env.get(constants.AUTH0_CLIENT_SECRET)
 AUTH0_DOMAIN = env.get(constants.AUTH0_DOMAIN)
 AUTH0_BASE_URL = 'https://' + AUTH0_DOMAIN
 AUTH0_AUDIENCE = env.get(constants.AUTH0_AUDIENCE)
+MY_URL = env.get('MY_URL')
 
 
 app = Flask(__name__, static_url_path='/public', static_folder='./public')
@@ -78,7 +79,6 @@ def home():
 @app.route('/callback')
 def callback_handling():
     auth0.authorize_access_token(code_verifier=code_verifier)
-#    auth0.authorize_access_token(grant_type='authorization_code')
     resp = auth0.get('userinfo')
     userinfo = resp.json()
 
@@ -88,7 +88,7 @@ def callback_handling():
         'user_id': userinfo['sub'],
         'name': userinfo['preferred_username']
     }
-    return redirect('https://markus.d.dom.de/dashboard')
+    return redirect(MY_URL + '/dashboard')
 
 
 @app.route('/login')
@@ -99,7 +99,7 @@ def login():
 @app.route('/logout')
 def logout():
     session.clear()
-    params = {'redirect_uri': 'https://markus.d.dom.de', 'client_id': AUTH0_CLIENT_ID}
+    params = {'redirect_uri': MY_URL, 'client_id': AUTH0_CLIENT_ID}
     return redirect(auth0.api_base_url + 'logout?' + urlencode(params))
 
 
