@@ -79,15 +79,12 @@ def home():
 @app.route('/callback')
 def callback_handling():
     auth0.authorize_access_token(code_verifier=code_verifier)
-    resp = auth0.get('userinfo')
+    resp = auth0.get(AUTH0_AUDIENCE)
     userinfo = resp.json()
 
     session[constants.JWT_PAYLOAD] = userinfo
 
-    session[constants.PROFILE_KEY] = {
-        'user_id': userinfo['sub'],
-        'name': userinfo['preferred_username']
-    }
+    session[constants.PROFILE_KEY] = userinfo
     return redirect(MY_URL + '/dashboard')
 
 
