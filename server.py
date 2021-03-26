@@ -55,7 +55,7 @@ auth0 = oauth.register(
     access_token_url=AUTH0_BASE_URL + '/token',
     authorize_url=AUTH0_BASE_URL + '/auth',
     client_kwargs={
-        'scope': 'openid profile email',
+        'scope': 'openid all csc prepaidActivation',
     },
 )
 
